@@ -1,27 +1,27 @@
-import { useState } from "react";
+import React from "react";
 
 interface BlockStackProps {
   label: string;
+  blocks: number;
+  setBlocks: React.Dispatch<React.SetStateAction<number>>;
+  stackRef: React.RefObject<HTMLDivElement>;
 }
 
-const BlockStack = ({ label }: BlockStackProps) => {
-  const [blocks, setBlocks] = useState<number>(0);
-
+const BlockStack = ({
+  label,
+  blocks,
+  setBlocks,
+  stackRef,
+}: BlockStackProps) => {
   const handleAddBlock = () => {
     if (blocks < 10) {
       setBlocks((prev) => prev + 1);
     }
   };
 
-  const handleDragStart = (
-    e: React.DragEvent<HTMLDivElement>,
-    index: number
-  ) => {
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/plain", `${index}`);
-  };
-
-  const handleDragEnd = () => {
+    e.dataTransfer.setData("text/plain", "block");
     setBlocks((prev) => Math.max(prev - 1, 0));
   };
 
@@ -29,11 +29,15 @@ const BlockStack = ({ label }: BlockStackProps) => {
     <div className="flex flex-col items-center">
       <div className="text-xl font-bold mb-4">{label}</div>
       <div
+        ref={stackRef}
         onClick={handleAddBlock}
         className={`flex flex-col-reverse gap-y-1 ${
           blocks >= 10 ? "cursor-not-allowed" : "cursor-pointer"
         }`}
-        style={{ width: "2rem", paddingTop: blocks === 0 ? "2rem" : "0" }}
+        style={{
+          width: "2rem",
+          paddingTop: blocks === 0 ? "2rem" : "0",
+        }}
       >
         {Array(blocks)
           .fill(null)
@@ -42,8 +46,7 @@ const BlockStack = ({ label }: BlockStackProps) => {
               key={index}
               className="bg-blue-500 w-full h-8 rounded-md shadow-md"
               draggable={true}
-              onDragStart={(e) => handleDragStart(e, index)}
-              onDragEnd={handleDragEnd}
+              onDragStart={handleDragStart}
               style={{
                 userSelect: "none",
                 touchAction: "none",
