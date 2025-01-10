@@ -13,7 +13,15 @@ const BlockStack = ({ label }: BlockStackProps) => {
     }
   };
 
-  const handleRemoveBlock = () => {
+  const handleDragStart = (
+    e: React.DragEvent<HTMLDivElement>,
+    index: number
+  ) => {
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", `${index}`);
+  };
+
+  const handleDragEnd = () => {
     setBlocks((prev) => Math.max(prev - 1, 0));
   };
 
@@ -34,9 +42,12 @@ const BlockStack = ({ label }: BlockStackProps) => {
               key={index}
               className="bg-blue-500 w-full h-8 rounded-md shadow-md"
               draggable={true}
-              onDragStart={(e) => {
-                e.dataTransfer.setData("text/plain", `${index}`);
-                handleRemoveBlock();
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragEnd={handleDragEnd}
+              style={{
+                userSelect: "none",
+                touchAction: "none",
+                cursor: "grab",
               }}
             ></div>
           ))}
