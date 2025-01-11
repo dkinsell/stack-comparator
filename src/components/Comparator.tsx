@@ -35,15 +35,15 @@ const Comparator = ({
       const stack2Rect = stack2Ref.current.getBoundingClientRect();
 
       const offsetX = stack1Rect.width / 2;
-      const gap = 30; // Increased spacing for better visual alignment
+      const lineGap = 20;
 
       setPositions({
         x1: stack1Rect.left + offsetX,
-        y1_top: stack1Rect.top - gap,
-        y1_bottom: stack1Rect.bottom + gap,
+        y1_top: stack1Rect.top - lineGap,
+        y1_bottom: stack1Rect.bottom + lineGap,
         x2: stack2Rect.left + offsetX,
-        y2_top: stack2Rect.top - gap,
-        y2_bottom: stack2Rect.bottom + gap,
+        y2_top: stack2Rect.top - lineGap,
+        y2_bottom: stack2Rect.bottom + lineGap,
       });
     }
   }, [height1, height2, stack1Ref, stack2Ref]);
@@ -51,10 +51,7 @@ const Comparator = ({
   return (
     <svg
       className="absolute w-full h-full pointer-events-none"
-      style={{
-        margin: "20px",
-        boxSizing: "border-box",
-      }}
+      style={{ top: 0, left: 0 }}
     >
       <line
         x1={positions.x1}
@@ -65,6 +62,7 @@ const Comparator = ({
         strokeWidth="8"
         strokeLinecap="round"
       />
+
       <line
         x1={positions.x1}
         y1={positions.y1_bottom}
@@ -74,6 +72,28 @@ const Comparator = ({
         strokeWidth="8"
         strokeLinecap="round"
       />
+
+      <text
+        x={positions.x1}
+        y={positions.y1_bottom + 40}
+        fill="white"
+        fontSize="20"
+        fontWeight="bold"
+        textAnchor="middle"
+      >
+        {height1}
+      </text>
+
+      <text
+        x={positions.x2}
+        y={positions.y2_bottom + 40}
+        fill="white"
+        fontSize="20"
+        fontWeight="bold"
+        textAnchor="middle"
+      >
+        {height2}
+      </text>
     </svg>
   );
 };

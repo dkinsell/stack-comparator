@@ -14,8 +14,8 @@ const App = () => {
       <div
         className="flex items-center"
         style={{
-          justifyContent: "space-evenly", // Adjust spacing between stacks
-          width: "60%", // Center stacks proportionally
+          justifyContent: "space-evenly",
+          width: "60%",
         }}
       >
         <BlockStack

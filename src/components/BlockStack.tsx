@@ -30,7 +30,7 @@ const BlockStack = ({
     <div
       className="relative flex flex-col items-center"
       style={{
-        paddingTop: "4rem", // Slightly increased padding for better alignment
+        paddingTop: "4rem",
         position: "relative",
       }}
     >
@@ -62,7 +62,6 @@ const BlockStack = ({
             ></div>
           ))}
       </div>
-      <p className="mt-2 text-sm text-gray-600">{blocks}</p>
     </div>
   );
 };

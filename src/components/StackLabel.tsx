@@ -7,9 +7,9 @@ const StackLabel = ({ text }: StackLabelProps) => {
     <div
       style={{
         position: "absolute",
-        top: "-2rem", // Position above the stack
-        zIndex: 10, // Ensure it renders above lines
-        whiteSpace: "nowrap", // Prevent the text from wrapping
+        top: "-2rem",
+        zIndex: 10,
+        whiteSpace: "nowrap",
       }}
       className="text-xl font-bold"
     >
