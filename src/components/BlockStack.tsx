@@ -1,4 +1,5 @@
 import React from "react";
+import StackLabel from "./StackLabel";
 
 interface BlockStackProps {
   label: string;
@@ -26,8 +27,14 @@ const BlockStack = ({
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="text-xl font-bold mb-4">{label}</div>
+    <div
+      className="relative flex flex-col items-center"
+      style={{
+        paddingTop: "4rem", // Slightly increased padding for better alignment
+        position: "relative",
+      }}
+    >
+      <StackLabel text={label} />
       <div
         ref={stackRef}
         onClick={handleAddBlock}

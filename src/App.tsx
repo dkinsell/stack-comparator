@@ -11,24 +11,32 @@ const App = () => {
 
   return (
     <div className="relative flex justify-center items-center h-screen bg-gray-900 text-white">
-      <BlockStack
-        label="Stack 1"
-        blocks={stack1}
-        setBlocks={setStack1}
-        stackRef={stack1Ref}
-      />
-      <Comparator
-        height1={stack1}
-        height2={stack2}
-        stack1Ref={stack1Ref}
-        stack2Ref={stack2Ref}
-      />
-      <BlockStack
-        label="Stack 2"
-        blocks={stack2}
-        setBlocks={setStack2}
-        stackRef={stack2Ref}
-      />
+      <div
+        className="flex items-center"
+        style={{
+          justifyContent: "space-evenly", // Adjust spacing between stacks
+          width: "60%", // Center stacks proportionally
+        }}
+      >
+        <BlockStack
+          label="Stack 1"
+          blocks={stack1}
+          setBlocks={setStack1}
+          stackRef={stack1Ref}
+        />
+        <Comparator
+          height1={stack1}
+          height2={stack2}
+          stack1Ref={stack1Ref}
+          stack2Ref={stack2Ref}
+        />
+        <BlockStack
+          label="Stack 2"
+          blocks={stack2}
+          setBlocks={setStack2}
+          stackRef={stack2Ref}
+        />
+      </div>
     </div>
   );
 };
