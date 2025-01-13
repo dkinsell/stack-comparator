@@ -11,6 +11,8 @@ interface ControlPanelProps {
   setRightStackLabel: React.Dispatch<React.SetStateAction<string>>;
   mode: string;
   setMode: React.Dispatch<React.SetStateAction<string>>;
+  showComparator: boolean;
+  setShowComparator: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ControlPanel = ({
@@ -24,6 +26,8 @@ const ControlPanel = ({
   setRightStackLabel,
   mode,
   setMode,
+  showComparator,
+  setShowComparator,
 }: ControlPanelProps) => {
   const handleStackChange =
     (setter: React.Dispatch<SetStateAction<number>>) =>
@@ -111,6 +115,19 @@ const ControlPanel = ({
           <option value="addRemove">Add/Remove</option>
           <option value="drawCompare">Draw Compare</option>
         </select>
+      </div>
+
+      <div className="mb-6">
+        <label htmlFor="comparator-toggle" className="block mb-2 text-lg">
+          Show Comparator Lines
+        </label>
+        <button
+          id="compator-toggle"
+          onClick={() => setShowComparator((prev) => !prev)}
+          className="w-full bg-gray-700 rounded-md text-white text-lg p-2"
+        >
+          {showComparator ? "Hide Comparator" : "Show Comparator"}
+        </button>
       </div>
     </div>
   );

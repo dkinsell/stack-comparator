@@ -5,6 +5,7 @@ interface ComparatorProps {
   rightHeight: number;
   leftStackRef: React.RefObject<HTMLDivElement>;
   rightStackRef: React.RefObject<HTMLDivElement>;
+  showComparator: boolean;
 }
 
 const Comparator = ({
@@ -12,6 +13,7 @@ const Comparator = ({
   rightHeight,
   leftStackRef,
   rightStackRef,
+  showComparator,
 }: ComparatorProps) => {
   const [positions, setPositions] = useState<{
     x1: number;
@@ -53,25 +55,28 @@ const Comparator = ({
       className="absolute w-full h-full pointer-events-none"
       style={{ top: 0, left: 0 }}
     >
-      <line
-        x1={positions.x1}
-        y1={positions.y1_top}
-        x2={positions.x2}
-        y2={positions.y2_top}
-        stroke="cyan"
-        strokeWidth="8"
-        strokeLinecap="round"
-      />
-
-      <line
-        x1={positions.x1}
-        y1={positions.y1_bottom}
-        x2={positions.x2}
-        y2={positions.y2_bottom}
-        stroke="cyan"
-        strokeWidth="8"
-        strokeLinecap="round"
-      />
+      {showComparator && (
+        <>
+          <line
+            x1={positions.x1}
+            y1={positions.y1_top}
+            x2={positions.x2}
+            y2={positions.y2_top}
+            stroke="cyan"
+            strokeWidth="8"
+            strokeLinecap="round"
+          />
+          <line
+            x1={positions.x1}
+            y1={positions.y1_bottom}
+            x2={positions.x2}
+            y2={positions.y2_bottom}
+            stroke="cyan"
+            strokeWidth="8"
+            strokeLinecap="round"
+          />
+        </>
+      )}
 
       <text
         x={positions.x1}
@@ -83,7 +88,6 @@ const Comparator = ({
       >
         {leftHeight}
       </text>
-
       <text
         x={positions.x2}
         y={positions.y2_bottom + 40}

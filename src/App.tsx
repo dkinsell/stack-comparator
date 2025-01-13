@@ -9,6 +9,7 @@ const App = () => {
   const [leftStackLabel, setLeftStackLabel] = useState<string>("Left Stack");
   const [rightStackLabel, setRightStackLabel] = useState<string>("Right Stack");
   const [mode, setMode] = useState<string>("none");
+  const [showComparator, setShowComparator] = useState<boolean>(true);
 
   const leftStackRef = useRef<HTMLDivElement>(null);
   const rightStackRef = useRef<HTMLDivElement>(null);
@@ -41,6 +42,7 @@ const App = () => {
           rightHeight={rightStack}
           leftStackRef={leftStackRef}
           rightStackRef={rightStackRef}
+          showComparator={showComparator}
         />
         <BlockStack
           label={rightStackLabel}
@@ -65,6 +67,8 @@ const App = () => {
         setRightStackLabel={setRightStackLabel}
         mode={mode}
         setMode={setMode}
+        showComparator={showComparator}
+        setShowComparator={setShowComparator}
       />
     </div>
   );
