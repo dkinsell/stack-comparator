@@ -6,6 +6,8 @@ interface BlockStackProps {
   blocks: number;
   setBlocks: React.Dispatch<React.SetStateAction<number>>;
   stackRef: React.RefObject<HTMLDivElement>;
+  mode: string;
+  onStackInteraction: (action: string) => void;
 }
 
 const BlockStack = ({
@@ -13,6 +15,8 @@ const BlockStack = ({
   blocks,
   setBlocks,
   stackRef,
+  mode,
+  onStackInteraction,
 }: BlockStackProps) => {
   const handleAddBlock = () => {
     if (blocks < 10) {
@@ -20,10 +24,26 @@ const BlockStack = ({
     }
   };
 
+  const handleRemoveBlock = () => {
+    if (blocks > 0) {
+      setBlocks((prev) => prev - 1);
+    }
+  };
+
+  const handleClick = () => {
+    if (mode === "addRemove") {
+      handleAddBlock();
+    }
+  };
+
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/plain", "block");
-    setBlocks((prev) => Math.max(prev - 1, 0));
+    if (mode === "addRemove") {
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", "block");
+      handleRemoveBlock();
+    } else if (mode === "drawCompare") {
+      onStackInteraction("dragStart");
+    }
   };
 
   return (
@@ -37,7 +57,7 @@ const BlockStack = ({
       <StackLabel text={label} />
       <div
         ref={stackRef}
-        onClick={handleAddBlock}
+        onClick={handleClick}
         className={`flex flex-col-reverse gap-y-1 ${
           blocks >= 10 ? "cursor-not-allowed" : "cursor-pointer"
         }`}
@@ -52,12 +72,12 @@ const BlockStack = ({
             <div
               key={index}
               className="bg-blue-500 w-full h-8 rounded-md shadow-md"
-              draggable={true}
+              draggable={mode === "addRemove"}
               onDragStart={handleDragStart}
               style={{
                 userSelect: "none",
                 touchAction: "none",
-                cursor: "grab",
+                cursor: mode === "addRemove" ? "grab" : "default",
               }}
             ></div>
           ))}

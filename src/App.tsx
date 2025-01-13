@@ -11,6 +11,10 @@ const App = () => {
   const stack1Ref = useRef<HTMLDivElement>(null);
   const stack2Ref = useRef<HTMLDivElement>(null);
 
+  const handleStackInteraction = (stack: string, action: string) => {
+    console.log(`Interaction on ${stack}: ${action}`);
+  };
+
   return (
     <div className="relative flex justify-center items-center h-screen bg-gray-900 text-white">
       <div
@@ -25,6 +29,10 @@ const App = () => {
           blocks={stack1}
           setBlocks={setStack1}
           stackRef={stack1Ref}
+          mode={mode}
+          onStackInteraction={(action) =>
+            handleStackInteraction("stack1", action)
+          }
         />
         <Comparator
           height1={stack1}
@@ -37,6 +45,10 @@ const App = () => {
           blocks={stack2}
           setBlocks={setStack2}
           stackRef={stack2Ref}
+          mode={mode}
+          onStackInteraction={(action) =>
+            handleStackInteraction("stack2", action)
+          }
         />
       </div>
 
