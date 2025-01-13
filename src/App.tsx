@@ -1,10 +1,12 @@
 import { useRef, useState } from "react";
 import BlockStack from "./components/BlockStack";
 import Comparator from "./components/Comparator";
+import ControlPanel from "./components/ControlPanel";
 
 const App = () => {
   const [stack1, setStack1] = useState<number>(0);
   const [stack2, setStack2] = useState<number>(0);
+  const [mode, setMode] = useState<string>("none");
 
   const stack1Ref = useRef<HTMLDivElement>(null);
   const stack2Ref = useRef<HTMLDivElement>(null);
@@ -37,6 +39,13 @@ const App = () => {
           stackRef={stack2Ref}
         />
       </div>
+
+      <ControlPanel
+        stack1={stack1}
+        stack2={stack2}
+        mode={mode}
+        setMode={setMode}
+      />
     </div>
   );
 };
