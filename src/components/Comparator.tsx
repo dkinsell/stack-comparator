@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 
 interface ComparatorProps {
-  height1: number;
-  height2: number;
-  stack1Ref: React.RefObject<HTMLDivElement>;
-  stack2Ref: React.RefObject<HTMLDivElement>;
+  leftHeight: number;
+  rightHeight: number;
+  leftStackRef: React.RefObject<HTMLDivElement>;
+  rightStackRef: React.RefObject<HTMLDivElement>;
 }
 
 const Comparator = ({
-  height1,
-  height2,
-  stack1Ref,
-  stack2Ref,
+  leftHeight,
+  rightHeight,
+  leftStackRef,
+  rightStackRef,
 }: ComparatorProps) => {
   const [positions, setPositions] = useState<{
     x1: number;
@@ -30,23 +30,23 @@ const Comparator = ({
   });
 
   useEffect(() => {
-    if (stack1Ref.current && stack2Ref.current) {
-      const stack1Rect = stack1Ref.current.getBoundingClientRect();
-      const stack2Rect = stack2Ref.current.getBoundingClientRect();
+    if (leftStackRef.current && rightStackRef.current) {
+      const leftStackRect = leftStackRef.current.getBoundingClientRect();
+      const rightStackRect = rightStackRef.current.getBoundingClientRect();
 
-      const offsetX = stack1Rect.width / 2;
+      const offsetX = leftStackRect.width / 2;
       const lineGap = 20;
 
       setPositions({
-        x1: stack1Rect.left + offsetX,
-        y1_top: stack1Rect.top - lineGap,
-        y1_bottom: stack1Rect.bottom + lineGap,
-        x2: stack2Rect.left + offsetX,
-        y2_top: stack2Rect.top - lineGap,
-        y2_bottom: stack2Rect.bottom + lineGap,
+        x1: leftStackRect.left + offsetX,
+        y1_top: leftStackRect.top - lineGap,
+        y1_bottom: leftStackRect.bottom + lineGap,
+        x2: rightStackRect.left + offsetX,
+        y2_top: rightStackRect.top - lineGap,
+        y2_bottom: rightStackRect.bottom + lineGap,
       });
     }
-  }, [height1, height2, stack1Ref, stack2Ref]);
+  }, [leftHeight, rightHeight, leftStackRef, rightStackRef]);
 
   return (
     <svg
@@ -81,7 +81,7 @@ const Comparator = ({
         fontWeight="bold"
         textAnchor="middle"
       >
-        {height1}
+        {leftHeight}
       </text>
 
       <text
@@ -92,7 +92,7 @@ const Comparator = ({
         fontWeight="bold"
         textAnchor="middle"
       >
-        {height2}
+        {rightHeight}
       </text>
     </svg>
   );

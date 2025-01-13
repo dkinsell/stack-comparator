@@ -4,14 +4,14 @@ import Comparator from "./components/Comparator";
 import ControlPanel from "./components/ControlPanel";
 
 const App = () => {
-  const [stack1, setStack1] = useState<number>(0);
-  const [stack2, setStack2] = useState<number>(0);
-  const [stack1Label, setStack1Label] = useState<string>("Stack 1");
-  const [stack2Label, setStack2Label] = useState<string>("Stack 2");
+  const [leftStack, setLeftStack] = useState<number>(0);
+  const [rightStack, setRightStack] = useState<number>(0);
+  const [leftStackLabel, setLeftStackLabel] = useState<string>("Left Stack");
+  const [rightStackLabel, setRightStackLabel] = useState<string>("Right Stack");
   const [mode, setMode] = useState<string>("none");
 
-  const stack1Ref = useRef<HTMLDivElement>(null);
-  const stack2Ref = useRef<HTMLDivElement>(null);
+  const leftStackRef = useRef<HTMLDivElement>(null);
+  const rightStackRef = useRef<HTMLDivElement>(null);
 
   const handleStackInteraction = (stack: string, action: string) => {
     console.log(`Interaction on ${stack}: ${action}`);
@@ -27,42 +27,42 @@ const App = () => {
         }}
       >
         <BlockStack
-          label={stack1Label}
-          blocks={stack1}
-          setBlocks={setStack1}
-          stackRef={stack1Ref}
+          label={leftStackLabel}
+          blocks={leftStack}
+          setBlocks={setLeftStack}
+          stackRef={leftStackRef}
           mode={mode}
           onStackInteraction={(action) =>
-            handleStackInteraction("stack1", action)
+            handleStackInteraction("leftStack", action)
           }
         />
         <Comparator
-          height1={stack1}
-          height2={stack2}
-          stack1Ref={stack1Ref}
-          stack2Ref={stack2Ref}
+          leftHeight={leftStack}
+          rightHeight={rightStack}
+          leftStackRef={leftStackRef}
+          rightStackRef={rightStackRef}
         />
         <BlockStack
-          label={stack2Label}
-          blocks={stack2}
-          setBlocks={setStack2}
-          stackRef={stack2Ref}
+          label={rightStackLabel}
+          blocks={rightStack}
+          setBlocks={setRightStack}
+          stackRef={rightStackRef}
           mode={mode}
           onStackInteraction={(action) =>
-            handleStackInteraction("stack2", action)
+            handleStackInteraction("rightStack", action)
           }
         />
       </div>
 
       <ControlPanel
-        stack1={stack1}
-        stack2={stack2}
-        setStack1={setStack1}
-        setStack2={setStack2}
-        stack1Label={stack1Label}
-        setStack1Label={setStack1Label}
-        stack2Label={stack2Label}
-        setStack2Label={setStack2Label}
+        leftStack={leftStack}
+        rightStack={rightStack}
+        setLeftStack={setLeftStack}
+        setRightStack={setRightStack}
+        leftStackLabel={leftStackLabel}
+        setLeftStackLabel={setLeftStackLabel}
+        rightStackLabel={rightStackLabel}
+        setRightStackLabel={setRightStackLabel}
         mode={mode}
         setMode={setMode}
       />

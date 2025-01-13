@@ -1,27 +1,27 @@
 import { SetStateAction } from "react";
 
 interface ControlPanelProps {
-  stack1: number;
-  stack2: number;
-  setStack1: React.Dispatch<React.SetStateAction<number>>;
-  setStack2: React.Dispatch<React.SetStateAction<number>>;
-  stack1Label: string;
-  setStack1Label: React.Dispatch<React.SetStateAction<string>>;
-  stack2Label: string;
-  setStack2Label: React.Dispatch<React.SetStateAction<string>>;
+  leftStack: number;
+  rightStack: number;
+  setLeftStack: React.Dispatch<React.SetStateAction<number>>;
+  setRightStack: React.Dispatch<React.SetStateAction<number>>;
+  leftStackLabel: string;
+  setLeftStackLabel: React.Dispatch<React.SetStateAction<string>>;
+  rightStackLabel: string;
+  setRightStackLabel: React.Dispatch<React.SetStateAction<string>>;
   mode: string;
   setMode: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ControlPanel = ({
-  stack1,
-  stack2,
-  setStack1,
-  setStack2,
-  stack1Label,
-  setStack1Label,
-  stack2Label,
-  setStack2Label,
+  leftStack,
+  rightStack,
+  setLeftStack,
+  setRightStack,
+  leftStackLabel,
+  setLeftStackLabel,
+  rightStackLabel,
+  setRightStackLabel,
   mode,
   setMode,
 }: ControlPanelProps) => {
@@ -46,27 +46,27 @@ const ControlPanel = ({
       <h2 className="text-2xl font-bold mb-4">Control Panel</h2>
 
       <div className="mb-6">
-        <label htmlFor="stack1-input" className="block mb-2 text-lg">
+        <label htmlFor="left-stack-input" className="block mb-2 text-lg">
           Left Stack Blocks
         </label>
         <input
-          id="stack1-input"
+          id="left-stack-input"
           type="number"
-          value={stack1}
-          onChange={handleStackChange(setStack1)}
+          value={leftStack}
+          onChange={handleStackChange(setLeftStack)}
           min="0"
           max="10"
           className="w-full bg-gray-700 rounded-md text-white text-lg mb-4"
         />
 
-        <label htmlFor="stack2-input" className="block mb-2 text-lg">
+        <label htmlFor="right-stack-input" className="block mb-2 text-lg">
           Right Stack Blocks
         </label>
         <input
-          id="stack2-input"
+          id="right-stack-input"
           type="number"
-          value={stack2}
-          onChange={handleStackChange(setStack2)}
+          value={rightStack}
+          onChange={handleStackChange(setRightStack)}
           min="0"
           max="10"
           className="w-full bg-gray-700 rounded-md text-white text-lg mb-4"
@@ -74,25 +74,25 @@ const ControlPanel = ({
       </div>
 
       <div className="mb-6">
-        <label htmlFor="stack1-label" className="block mb-2 text-lg">
+        <label htmlFor="left-stack-label" className="block mb-2 text-lg">
           Left Stack Label
         </label>
         <input
-          id="stack1-label"
+          id="left-stack-label"
           type="text"
-          value={stack1Label}
-          onChange={handleLabelChange(setStack1Label)}
+          value={leftStackLabel}
+          onChange={handleLabelChange(setLeftStackLabel)}
           className="w-full bg-gray-700 rounded-md text-white text-lg mb-4"
         />
 
-        <label htmlFor="stack2-label" className="block mb-2 text-lg">
+        <label htmlFor="right-stack-label" className="block mb-2 text-lg">
           Right Stack Label
         </label>
         <input
-          id="stack2-label"
+          id="right-stack-label"
           type="text"
-          value={stack2Label}
-          onChange={handleLabelChange(setStack2Label)}
+          value={rightStackLabel}
+          onChange={handleLabelChange(setRightStackLabel)}
           className="w-full bg-gray-700 rounded-md text-white text-lg mb-4"
         />
       </div>
