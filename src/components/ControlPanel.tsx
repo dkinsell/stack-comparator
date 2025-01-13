@@ -5,6 +5,10 @@ interface ControlPanelProps {
   stack2: number;
   setStack1: React.Dispatch<React.SetStateAction<number>>;
   setStack2: React.Dispatch<React.SetStateAction<number>>;
+  stack1Label: string;
+  setStack1Label: React.Dispatch<React.SetStateAction<string>>;
+  stack2Label: string;
+  setStack2Label: React.Dispatch<React.SetStateAction<string>>;
   mode: string;
   setMode: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -14,6 +18,10 @@ const ControlPanel = ({
   stack2,
   setStack1,
   setStack2,
+  stack1Label,
+  setStack1Label,
+  stack2Label,
+  setStack2Label,
   mode,
   setMode,
 }: ControlPanelProps) => {
@@ -23,6 +31,13 @@ const ControlPanel = ({
       const value = Math.min(Math.max(0, Number(e.target.value)), 10);
       setter(value);
     };
+
+  const handleLabelChange =
+    (setter: React.Dispatch<SetStateAction<string>>) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setter(e.target.value);
+    };
+
   return (
     <div
       className="absolute top-0 right-0 p-6 bg-gray-800 text-white shadow-lg"
@@ -32,7 +47,7 @@ const ControlPanel = ({
 
       <div className="mb-6">
         <label htmlFor="stack1-input" className="block mb-2 text-lg">
-          Stack 1
+          Left Stack Blocks
         </label>
         <input
           id="stack1-input"
@@ -45,7 +60,7 @@ const ControlPanel = ({
         />
 
         <label htmlFor="stack2-input" className="block mb-2 text-lg">
-          Stack 2
+          Right Stack Blocks
         </label>
         <input
           id="stack2-input"
@@ -54,6 +69,30 @@ const ControlPanel = ({
           onChange={handleStackChange(setStack2)}
           min="0"
           max="10"
+          className="w-full bg-gray-700 rounded-md text-white text-lg mb-4"
+        />
+      </div>
+
+      <div className="mb-6">
+        <label htmlFor="stack1-label" className="block mb-2 text-lg">
+          Left Stack Label
+        </label>
+        <input
+          id="stack1-label"
+          type="text"
+          value={stack1Label}
+          onChange={handleLabelChange(setStack1Label)}
+          className="w-full bg-gray-700 rounded-md text-white text-lg mb-4"
+        />
+
+        <label htmlFor="stack2-label" className="block mb-2 text-lg">
+          Right Stack Label
+        </label>
+        <input
+          id="stack2-label"
+          type="text"
+          value={stack2Label}
+          onChange={handleLabelChange(setStack2Label)}
           className="w-full bg-gray-700 rounded-md text-white text-lg mb-4"
         />
       </div>

@@ -6,6 +6,8 @@ import ControlPanel from "./components/ControlPanel";
 const App = () => {
   const [stack1, setStack1] = useState<number>(0);
   const [stack2, setStack2] = useState<number>(0);
+  const [stack1Label, setStack1Label] = useState<string>("Stack 1");
+  const [stack2Label, setStack2Label] = useState<string>("Stack 2");
   const [mode, setMode] = useState<string>("none");
 
   const stack1Ref = useRef<HTMLDivElement>(null);
@@ -25,7 +27,7 @@ const App = () => {
         }}
       >
         <BlockStack
-          label="Stack 1"
+          label={stack1Label}
           blocks={stack1}
           setBlocks={setStack1}
           stackRef={stack1Ref}
@@ -41,7 +43,7 @@ const App = () => {
           stack2Ref={stack2Ref}
         />
         <BlockStack
-          label="Stack 2"
+          label={stack2Label}
           blocks={stack2}
           setBlocks={setStack2}
           stackRef={stack2Ref}
@@ -57,6 +59,10 @@ const App = () => {
         stack2={stack2}
         setStack1={setStack1}
         setStack2={setStack2}
+        stack1Label={stack1Label}
+        setStack1Label={setStack1Label}
+        stack2Label={stack2Label}
+        setStack2Label={setStack2Label}
         mode={mode}
         setMode={setMode}
       />
