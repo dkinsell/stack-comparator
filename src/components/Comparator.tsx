@@ -22,6 +22,8 @@ const Comparator = ({
     x2: number;
     y2_top: number;
     y2_bottom: number;
+    midX: number;
+    midY: number;
   }>({
     x1: 0,
     y1_top: 0,
@@ -29,6 +31,8 @@ const Comparator = ({
     x2: 0,
     y2_top: 0,
     y2_bottom: 0,
+    midX: 0,
+    midY: 0,
   });
 
   useEffect(() => {
@@ -46,9 +50,17 @@ const Comparator = ({
         x2: rightStackRect.left + offsetX,
         y2_top: rightStackRect.top - lineGap,
         y2_bottom: rightStackRect.bottom + lineGap,
+        midX: (leftStackRect.left + rightStackRect.right) / 2,
+        midY: (leftStackRect.bottom + leftStackRect.top) / 2,
       });
     }
   }, [leftHeight, rightHeight, leftStackRef, rightStackRef]);
+
+  const getComparatorSymbol = () => {
+    if (leftHeight > rightHeight) return ">";
+    if (leftHeight < rightHeight) return "<";
+    return "=";
+  };
 
   return (
     <svg
@@ -77,6 +89,18 @@ const Comparator = ({
           />
         </>
       )}
+
+      <text
+        x={positions.midX}
+        y={(positions.y1_top + positions.y1_bottom) / 2}
+        fill="white"
+        fontSize="32"
+        fontWeight="bold"
+        textAnchor="middle"
+        alignmentBaseline="middle"
+      >
+        {getComparatorSymbol()}
+      </text>
 
       <text
         x={positions.x1}
