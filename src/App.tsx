@@ -43,6 +43,8 @@ const App = () => {
       <ControlPanel
         stack1={stack1}
         stack2={stack2}
+        setStack1={setStack1}
+        setStack2={setStack2}
         mode={mode}
         setMode={setMode}
       />
