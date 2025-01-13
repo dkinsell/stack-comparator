@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 interface ComparatorProps {
   leftHeight: number;
@@ -35,7 +35,7 @@ const Comparator = ({
     midY: 0,
   });
 
-  useEffect(() => {
+  const calculatePositions = useCallback(() => {
     if (leftStackRef.current && rightStackRef.current) {
       const leftStackRect = leftStackRef.current.getBoundingClientRect();
       const rightStackRect = rightStackRef.current.getBoundingClientRect();
@@ -54,7 +54,21 @@ const Comparator = ({
         midY: (leftStackRect.bottom + leftStackRect.top) / 2,
       });
     }
-  }, [leftHeight, rightHeight, leftStackRef, rightStackRef]);
+  }, [leftStackRef, rightStackRef]);
+
+  useEffect(() => {
+    calculatePositions();
+
+    const handleResize = () => {
+      calculatePositions();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [calculatePositions, leftHeight, rightHeight]);
 
   const getComparatorSymbol = () => {
     if (leftHeight > rightHeight) return ">";
