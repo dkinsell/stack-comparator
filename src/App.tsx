@@ -1,21 +1,131 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import BlockStack from "./components/BlockStack";
 import Comparator from "./components/Comparator";
 import ControlPanel from "./components/ControlPanel";
 
-const App = () => {
+interface LineDefinition {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+interface StackSelection {
+  stack: "left" | "right";
+  position: "top" | "bottom";
+}
+
+interface RubberLine {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+const App: React.FC = () => {
   const [leftStack, setLeftStack] = useState<number>(0);
   const [rightStack, setRightStack] = useState<number>(0);
   const [leftStackLabel, setLeftStackLabel] = useState<string>("Left Stack");
   const [rightStackLabel, setRightStackLabel] = useState<string>("Right Stack");
+
   const [mode, setMode] = useState<string>("none");
+
   const [showComparator, setShowComparator] = useState<boolean>(true);
+
+  const [selectedStack, setSelectedStack] = useState<StackSelection | null>(
+    null
+  );
+  const [compareLines, setCompareLines] = useState<LineDefinition[]>([]);
+
+  const [rubberLine, setRubberLine] = useState<RubberLine | null>(null);
 
   const leftStackRef = useRef<HTMLDivElement>(null);
   const rightStackRef = useRef<HTMLDivElement>(null);
 
-  const handleStackInteraction = (stack: string, action: string) => {
-    console.log(`Interaction on ${stack}: ${action}`);
+  useEffect(() => {
+    if (mode !== "drawCompare") {
+      setCompareLines([]);
+      setSelectedStack(null);
+      setRubberLine(null);
+    }
+  }, [mode]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (rubberLine) {
+        setRubberLine((prev) => {
+          if (!prev) return null;
+          return {
+            ...prev,
+            x2: e.clientX,
+            y2: e.clientY,
+          };
+        });
+      }
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [rubberLine]);
+
+  const handleStackInteraction = (stack: "left" | "right", action: string) => {
+    if (mode === "drawCompare") {
+      if (action === "clickedTopBlock" || action === "clickedBottomBlock") {
+        const position = action === "clickedTopBlock" ? "top" : "bottom";
+
+        if (!selectedStack) {
+          setSelectedStack({ stack, position });
+
+          const { x, y } = getStackEdgeCoords(stack, position);
+          setRubberLine({ x1: x, y1: y, x2: x, y2: y });
+        } else {
+          if (
+            selectedStack.stack !== stack &&
+            selectedStack.position === position
+          ) {
+            const coords = getStackEdgeCoords(stack, position);
+            setCompareLines((prev) => [
+              ...prev,
+              {
+                x1: rubberLine?.x1 ?? 0,
+                y1: rubberLine?.y1 ?? 0,
+                x2: coords.x,
+                y2: coords.y,
+              },
+            ]);
+          }
+
+          setSelectedStack(null);
+          setRubberLine(null);
+        }
+      } else {
+        setSelectedStack(null);
+        setRubberLine(null);
+      }
+    }
+  };
+
+  const getStackEdgeCoords = (
+    whichStack: "left" | "right",
+    position: "top" | "bottom"
+  ): { x: number; y: number } => {
+    const stackRef = whichStack === "left" ? leftStackRef : rightStackRef;
+    if (!stackRef.current) return { x: 0, y: 0 };
+
+    const rect = stackRef.current.getBoundingClientRect();
+    const offsetX = rect.width / 2;
+    const lineGap = 20;
+
+    if (position === "top") {
+      return {
+        x: rect.left + offsetX,
+        y: rect.top - lineGap,
+      };
+    } else {
+      return {
+        x: rect.left + offsetX,
+        y: rect.bottom + lineGap,
+      };
+    }
   };
 
   return (
@@ -35,16 +145,21 @@ const App = () => {
           stackRef={leftStackRef}
           mode={mode}
           onStackInteraction={(action) =>
-            handleStackInteraction("leftStack", action)
+            handleStackInteraction("left", action)
           }
         />
+
         <Comparator
           leftHeight={leftStack}
           rightHeight={rightStack}
           leftStackRef={leftStackRef}
           rightStackRef={rightStackRef}
           showComparator={showComparator}
+          compareLines={compareLines}
+          mode={mode}
+          rubberLine={rubberLine}
         />
+
         <BlockStack
           label={rightStackLabel}
           blocks={rightStack}
@@ -52,7 +167,7 @@ const App = () => {
           stackRef={rightStackRef}
           mode={mode}
           onStackInteraction={(action) =>
-            handleStackInteraction("rightStack", action)
+            handleStackInteraction("right", action)
           }
         />
       </div>

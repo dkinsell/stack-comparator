@@ -10,33 +10,45 @@ interface BlockStackProps {
   onStackInteraction: (action: string) => void;
 }
 
-const BlockStack = ({
+const BlockStack: React.FC<BlockStackProps> = ({
   label,
   blocks,
   setBlocks,
   stackRef,
   mode,
   onStackInteraction,
-}: BlockStackProps) => {
-  const handleAddBlock = () => {
+}) => {
+  const handleAddBlock = (): void => {
     if (blocks < 10) {
       setBlocks((prev) => prev + 1);
     }
   };
 
-  const handleRemoveBlock = () => {
+  const handleRemoveBlock = (): void => {
     if (blocks > 0) {
       setBlocks((prev) => prev - 1);
     }
   };
 
-  const handleClick = () => {
+  const handleTopBlockClick = (): void => {
+    if (mode === "drawCompare" && blocks > 0) {
+      onStackInteraction("clickedTopBlock");
+    }
+  };
+
+  const handleBottomBlockClick = (): void => {
+    if (mode === "drawCompare" && blocks > 0) {
+      onStackInteraction("clickedBottomBlock");
+    }
+  };
+
+  const handleStackClick = (): void => {
     if (mode === "addRemove") {
       handleAddBlock();
     }
   };
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
     if (mode === "addRemove") {
       e.dataTransfer.effectAllowed = "move";
       e.dataTransfer.setData("text/plain", "block");
@@ -57,7 +69,7 @@ const BlockStack = ({
       <StackLabel text={label} />
       <div
         ref={stackRef}
-        onClick={handleClick}
+        onClick={handleStackClick}
         className={`flex flex-col-reverse gap-y-1 ${
           blocks >= 10 ? "cursor-not-allowed" : "cursor-pointer"
         }`}
@@ -68,19 +80,35 @@ const BlockStack = ({
       >
         {Array(blocks)
           .fill(null)
-          .map((_, index) => (
-            <div
-              key={index}
-              className="bg-blue-500 w-full h-8 rounded-md shadow-md"
-              draggable={mode === "addRemove"}
-              onDragStart={handleDragStart}
-              style={{
-                userSelect: "none",
-                touchAction: "none",
-                cursor: mode === "addRemove" ? "grab" : "default",
-              }}
-            ></div>
-          ))}
+          .map((_, index) => {
+            const isTopBlock = index === blocks - 1;
+            const isBottomBlock = index === 0;
+
+            return (
+              <div
+                key={index}
+                className="bg-blue-500 w-full h-8 rounded-md shadow-md"
+                draggable={mode === "addRemove"}
+                onDragStart={handleDragStart}
+                style={{
+                  userSelect: "none",
+                  touchAction: "none",
+                  cursor: mode === "addRemove" ? "grab" : "default",
+                }}
+                onClick={(e) => {
+                  if (mode === "drawCompare") {
+                    if (isTopBlock) {
+                      e.stopPropagation();
+                      handleTopBlockClick();
+                    } else if (isBottomBlock) {
+                      e.stopPropagation();
+                      handleBottomBlockClick();
+                    }
+                  }
+                }}
+              />
+            );
+          })}
       </div>
     </div>
   );

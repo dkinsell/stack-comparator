@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 interface ComparatorProps {
   leftHeight: number;
@@ -6,25 +6,27 @@ interface ComparatorProps {
   leftStackRef: React.RefObject<HTMLDivElement>;
   rightStackRef: React.RefObject<HTMLDivElement>;
   showComparator: boolean;
+  compareLines?: Array<{
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+  }>;
+  mode: string;
+  rubberLine?: { x1: number; y1: number; x2: number; y2: number } | null;
 }
 
-const Comparator = ({
+const Comparator: React.FC<ComparatorProps> = ({
   leftHeight,
   rightHeight,
   leftStackRef,
   rightStackRef,
   showComparator,
-}: ComparatorProps) => {
-  const [positions, setPositions] = useState<{
-    x1: number;
-    y1_top: number;
-    y1_bottom: number;
-    x2: number;
-    y2_top: number;
-    y2_bottom: number;
-    midX: number;
-    midY: number;
-  }>({
+  compareLines = [],
+  mode,
+  rubberLine,
+}) => {
+  const [positions, setPositions] = useState({
     x1: 0,
     y1_top: 0,
     y1_bottom: 0,
@@ -58,16 +60,9 @@ const Comparator = ({
 
   useEffect(() => {
     calculatePositions();
-
-    const handleResize = () => {
-      calculatePositions();
-    };
-
+    const handleResize = () => calculatePositions();
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, [calculatePositions, leftHeight, rightHeight]);
 
   const getComparatorSymbol = () => {
@@ -81,7 +76,7 @@ const Comparator = ({
       className="absolute w-full h-full pointer-events-none"
       style={{ top: 0, left: 0 }}
     >
-      {showComparator && (
+      {showComparator && mode !== "drawCompare" && (
         <>
           <line
             x1={positions.x1}
@@ -136,6 +131,32 @@ const Comparator = ({
       >
         {rightHeight}
       </text>
+
+      {compareLines.map((line, idx) => (
+        <line
+          key={idx}
+          x1={line.x1}
+          y1={line.y1}
+          x2={line.x2}
+          y2={line.y2}
+          stroke="yellow"
+          strokeWidth="4"
+          strokeLinecap="round"
+        />
+      ))}
+
+      {rubberLine && (
+        <line
+          x1={rubberLine.x1}
+          y1={rubberLine.y1}
+          x2={rubberLine.x2}
+          y2={rubberLine.y2}
+          stroke="yellow"
+          strokeDasharray="6, 6"
+          strokeWidth="4"
+          strokeLinecap="round"
+        />
+      )}
     </svg>
   );
 };
