@@ -39,7 +39,6 @@ const BlockStack: React.FC<BlockStackProps> = ({
       onStackInteraction("clickedTopBlock");
     }
   };
-
   const handleBottomBlockClick = (): void => {
     if (mode === "drawCompare" && blocks > 0 && !lockedBottom) {
       onStackInteraction("clickedBottomBlock");
@@ -56,19 +55,21 @@ const BlockStack: React.FC<BlockStackProps> = ({
     if (mode === "addRemove") {
       e.dataTransfer.effectAllowed = "move";
       e.dataTransfer.setData("text/plain", "block");
-      handleRemoveBlock();
     } else if (mode === "drawCompare") {
       onStackInteraction("dragStart");
+    }
+  };
+
+  const handleDragEnd = (): void => {
+    if (mode === "addRemove") {
+      handleRemoveBlock();
     }
   };
 
   return (
     <div
       className="relative flex flex-col items-center"
-      style={{
-        paddingTop: "4rem",
-        position: "relative",
-      }}
+      style={{ paddingTop: "4rem", position: "relative" }}
     >
       <StackLabel text={label} />
 
@@ -95,6 +96,7 @@ const BlockStack: React.FC<BlockStackProps> = ({
                 className="block-cube"
                 draggable={mode === "addRemove"}
                 onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
                 style={{
                   userSelect: "none",
                   touchAction: "none",

@@ -9,19 +9,16 @@ interface LineDefinition {
   x2: number;
   y2: number;
 }
-
 interface StackSelection {
   stack: "left" | "right";
   position: "top" | "bottom";
 }
-
 interface RubberLine {
   x1: number;
   y1: number;
   x2: number;
   y2: number;
 }
-
 interface LockedPositions {
   leftTop: boolean;
   leftBottom: boolean;
@@ -91,7 +88,6 @@ const App: React.FC = () => {
     if (mode === "drawCompare") {
       if (action === "clickedTopBlock" || action === "clickedBottomBlock") {
         const position = action === "clickedTopBlock" ? "top" : "bottom";
-
         if (!selectedStack) {
           setSelectedStack({ stack, position });
           const { x, y } = getStackEdgeCoords(stack, position);
