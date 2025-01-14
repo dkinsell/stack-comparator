@@ -18,7 +18,7 @@ interface ComparatorProps {
   rightStackRef: React.RefObject<HTMLDivElement>;
   showComparator: boolean;
   compareLines: LineReference[];
-  mode: string; // e.g. "none", "drawCompare", or "addRemove"
+  mode: string;
   rubberLine?: RubberLine | null;
   compareComplete: boolean;
 }
@@ -34,25 +34,19 @@ const Comparator: React.FC<ComparatorProps> = ({
   rubberLine,
   compareComplete,
 }) => {
-  //
-  // Tweak these two alpha values so each mode looks “just right”
-  //
-  const alphaNormal = 0.5; // used when mode !== "drawCompare"
-  const alphaDrawCompare = 0.35; // used in "drawCompare" mode
-  //
-  // Optional: a constant offset in pixels (e.g. nudge the icon upward)
-  //
-  const yOffset = -10; // or 0 if you don’t need extra offset
+  const alphaNormal = 0.5;
+  const alphaDrawCompare = 0.35;
+  const yOffset = -10;
 
   const [positions, setPositions] = useState({
-    x1: 0, // left stack center
+    x1: 0,
     y1_top: 0,
     y1_bottom: 0,
-    x2: 0, // right stack center
+    x2: 0,
     y2_top: 0,
     y2_bottom: 0,
-    midX: 0, // final comparator X
-    midY: 0, // final comparator Y
+    midX: 0,
+    midY: 0,
   });
 
   const calculatePositions = useCallback(() => {
@@ -64,26 +58,21 @@ const Comparator: React.FC<ComparatorProps> = ({
     const offsetX = leftRect.width / 2;
     const lineGap = 20;
 
-    // Left stack top & bottom
     const x1 = leftRect.left + offsetX;
     const y1_top = leftRect.top - lineGap;
     const y1_bottom = leftRect.bottom + lineGap;
 
-    // Right stack top & bottom
     const x2 = rightRect.left + offsetX;
     const y2_top = rightRect.top - lineGap;
     const y2_bottom = rightRect.bottom + lineGap;
 
-    // Midpoints of top and bottom lines
     const topMidX = (x1 + x2) / 2;
     const topMidY = (y1_top + y2_top) / 2;
     const bottomMidX = (x1 + x2) / 2;
     const bottomMidY = (y1_bottom + y2_bottom) / 2;
 
-    // Decide which alpha to use based on the mode
     const alpha = mode === "drawCompare" ? alphaDrawCompare : alphaNormal;
 
-    // Weighted blend from the top midpoint to bottom midpoint
     const midX = topMidX + alpha * (bottomMidX - topMidX);
     const midY = topMidY + alpha * (bottomMidY - topMidY) + yOffset;
 
@@ -113,9 +102,6 @@ const Comparator: React.FC<ComparatorProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, [calculatePositions, leftHeight, rightHeight]);
 
-  /**
-   * Return the x,y for top or bottom on left or right stack
-   */
   const getStackEdgeCoords = (
     which: "left" | "right",
     pos: "top" | "bottom"
@@ -143,10 +129,6 @@ const Comparator: React.FC<ComparatorProps> = ({
         className="absolute w-full h-full pointer-events-none"
         style={{ top: 0, left: 0 }}
       >
-        {/* 
-          Show the big lines if showComparator && we are NOT in drawCompare.
-          (If you still want them in drawCompare, remove the condition.)
-        */}
         {showComparator && mode !== "drawCompare" && (
           <>
             <line
@@ -170,10 +152,6 @@ const Comparator: React.FC<ComparatorProps> = ({
           </>
         )}
 
-        {/*
-          The normal comparator symbol (>, <, =) if NOT in drawCompare mode.
-          We place it at positions.midX, midY from the same logic as the lines.
-        */}
         {mode !== "drawCompare" && (
           <text
             x={positions.midX}
@@ -188,10 +166,6 @@ const Comparator: React.FC<ComparatorProps> = ({
           </text>
         )}
 
-        {/* 
-          Numeric labels under each stack.
-          Feel free to nudge them up/down if needed.
-        */}
         <text
           x={positions.x1}
           y={positions.y1_bottom + 40}
@@ -213,10 +187,6 @@ const Comparator: React.FC<ComparatorProps> = ({
           {rightHeight}
         </text>
 
-        {/* 
-          The user‐drawn lines in drawCompare mode (top->top, bottom->bottom).
-          We do the same getStackEdgeCoords approach so they move on resize.
-        */}
         {compareLines.map((lineRef, idx) => {
           const leftPt = getStackEdgeCoords("left", lineRef.position);
           const rightPt = getStackEdgeCoords("right", lineRef.position);
@@ -234,9 +204,6 @@ const Comparator: React.FC<ComparatorProps> = ({
           );
         })}
 
-        {/* 
-          If user is dragging out a new line (rubberLine), show it dashed.
-        */}
         {mode === "drawCompare" && rubberLine && (
           <line
             x1={rubberLine.x1}
@@ -251,13 +218,8 @@ const Comparator: React.FC<ComparatorProps> = ({
         )}
       </svg>
 
-      {/* 
-        If we've completed top->top and bottom->bottom lines,
-        show the animated comparator icon at that same midX, midY 
-        (again, it can use the same alpha or offset).
-      */}
       {mode === "drawCompare" && compareComplete && (
-        <MotionComparatorIcon x={positions.midX} y={positions.midY} />
+        <MotionComparatorIcon x={positions.midX - 20} y={positions.midY - 40} />
       )}
     </>
   );

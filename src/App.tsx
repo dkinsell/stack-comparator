@@ -203,7 +203,6 @@ const App: React.FC = () => {
       className="relative flex justify-center items-center h-screen text-white"
       onClick={handleGlobalClick}
     >
-      {/* The main area with two stacks + comparator */}
       <div
         className="flex items-center"
         style={{
@@ -231,7 +230,6 @@ const App: React.FC = () => {
           leftStackRef={leftStackRef}
           rightStackRef={rightStackRef}
           showComparator={showComparator}
-          /** We pass the 'references' instead of static coords: */
           compareLines={compareLines}
           mode={mode}
           rubberLine={rubberLine}
@@ -252,7 +250,6 @@ const App: React.FC = () => {
         />
       </div>
 
-      {/* The side control panel */}
       <ControlPanel
         leftStack={leftStack}
         rightStack={rightStack}
