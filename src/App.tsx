@@ -22,6 +22,13 @@ interface RubberLine {
   y2: number;
 }
 
+interface LockedPositions {
+  leftTop: boolean;
+  leftBottom: boolean;
+  rightTop: boolean;
+  rightBottom: boolean;
+}
+
 const App: React.FC = () => {
   const [leftStack, setLeftStack] = useState<number>(0);
   const [rightStack, setRightStack] = useState<number>(0);
@@ -38,6 +45,13 @@ const App: React.FC = () => {
   const [compareLines, setCompareLines] = useState<LineDefinition[]>([]);
   const [rubberLine, setRubberLine] = useState<RubberLine | null>(null);
 
+  const [lockedPositions, setLockedPositions] = useState<LockedPositions>({
+    leftTop: false,
+    leftBottom: false,
+    rightTop: false,
+    rightBottom: false,
+  });
+
   const leftStackRef = useRef<HTMLDivElement>(null);
   const rightStackRef = useRef<HTMLDivElement>(null);
 
@@ -46,6 +60,13 @@ const App: React.FC = () => {
       setCompareLines([]);
       setSelectedStack(null);
       setRubberLine(null);
+
+      setLockedPositions({
+        leftTop: false,
+        leftBottom: false,
+        rightTop: false,
+        rightBottom: false,
+      });
     }
   }, [mode]);
 
@@ -94,6 +115,20 @@ const App: React.FC = () => {
                 y2: coords.y,
               },
             ]);
+
+            if (position === "top") {
+              setLockedPositions((prev) => ({
+                ...prev,
+                leftTop: true,
+                rightTop: true,
+              }));
+            } else {
+              setLockedPositions((prev) => ({
+                ...prev,
+                leftBottom: true,
+                rightBottom: true,
+              }));
+            }
           }
           setSelectedStack(null);
           setRubberLine(null);
@@ -151,6 +186,8 @@ const App: React.FC = () => {
           onStackInteraction={(action) =>
             handleStackInteraction("left", action)
           }
+          lockedTop={lockedPositions.leftTop}
+          lockedBottom={lockedPositions.leftBottom}
         />
 
         <Comparator
@@ -173,6 +210,8 @@ const App: React.FC = () => {
           onStackInteraction={(action) =>
             handleStackInteraction("right", action)
           }
+          lockedTop={lockedPositions.rightTop}
+          lockedBottom={lockedPositions.rightBottom}
         />
       </div>
 

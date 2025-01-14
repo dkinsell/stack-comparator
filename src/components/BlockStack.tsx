@@ -8,6 +8,8 @@ interface BlockStackProps {
   stackRef: React.RefObject<HTMLDivElement>;
   mode: string;
   onStackInteraction: (action: string) => void;
+  lockedTop: boolean;
+  lockedBottom: boolean;
 }
 
 const BlockStack: React.FC<BlockStackProps> = ({
@@ -17,6 +19,8 @@ const BlockStack: React.FC<BlockStackProps> = ({
   stackRef,
   mode,
   onStackInteraction,
+  lockedTop,
+  lockedBottom,
 }) => {
   const handleAddBlock = (): void => {
     if (blocks < 10) {
@@ -31,13 +35,13 @@ const BlockStack: React.FC<BlockStackProps> = ({
   };
 
   const handleTopBlockClick = (): void => {
-    if (mode === "drawCompare" && blocks > 0) {
+    if (mode === "drawCompare" && blocks > 0 && !lockedTop) {
       onStackInteraction("clickedTopBlock");
     }
   };
 
   const handleBottomBlockClick = (): void => {
-    if (mode === "drawCompare" && blocks > 0) {
+    if (mode === "drawCompare" && blocks > 0 && !lockedBottom) {
       onStackInteraction("clickedBottomBlock");
     }
   };
@@ -99,11 +103,15 @@ const BlockStack: React.FC<BlockStackProps> = ({
                 onClick={(e) => {
                   if (mode === "drawCompare") {
                     if (isTopBlock) {
-                      e.stopPropagation();
-                      handleTopBlockClick();
+                      if (!lockedTop) {
+                        e.stopPropagation();
+                        handleTopBlockClick();
+                      }
                     } else if (isBottomBlock) {
-                      e.stopPropagation();
-                      handleBottomBlockClick();
+                      if (!lockedBottom) {
+                        e.stopPropagation();
+                        handleBottomBlockClick();
+                      }
                     }
                   }
                 }}
