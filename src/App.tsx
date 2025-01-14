@@ -29,14 +29,13 @@ const App: React.FC = () => {
   const [rightStackLabel, setRightStackLabel] = useState<string>("Right Stack");
 
   const [mode, setMode] = useState<string>("none");
-
   const [showComparator, setShowComparator] = useState<boolean>(true);
 
   const [selectedStack, setSelectedStack] = useState<StackSelection | null>(
     null
   );
-  const [compareLines, setCompareLines] = useState<LineDefinition[]>([]);
 
+  const [compareLines, setCompareLines] = useState<LineDefinition[]>([]);
   const [rubberLine, setRubberLine] = useState<RubberLine | null>(null);
 
   const leftStackRef = useRef<HTMLDivElement>(null);
@@ -55,17 +54,20 @@ const App: React.FC = () => {
       if (rubberLine) {
         setRubberLine((prev) => {
           if (!prev) return null;
-          return {
-            ...prev,
-            x2: e.clientX,
-            y2: e.clientY,
-          };
+          return { ...prev, x2: e.clientX, y2: e.clientY };
         });
       }
     };
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [rubberLine]);
+
+  const handleGlobalClick = () => {
+    if (mode === "drawCompare" && rubberLine) {
+      setRubberLine(null);
+      setSelectedStack(null);
+    }
+  };
 
   const handleStackInteraction = (stack: "left" | "right", action: string) => {
     if (mode === "drawCompare") {
@@ -93,7 +95,6 @@ const App: React.FC = () => {
               },
             ]);
           }
-
           setSelectedStack(null);
           setRubberLine(null);
         }
@@ -129,7 +130,10 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="relative flex justify-center items-center h-screen bg-gray-900 text-white">
+    <div
+      className="relative flex justify-center items-center h-screen bg-gray-900 text-white"
+      onClick={handleGlobalClick}
+    >
       <div
         className="flex items-center"
         style={{

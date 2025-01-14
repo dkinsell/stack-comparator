@@ -67,6 +67,7 @@ const BlockStack: React.FC<BlockStackProps> = ({
       }}
     >
       <StackLabel text={label} />
+
       <div
         ref={stackRef}
         onClick={handleStackClick}
