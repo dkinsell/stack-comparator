@@ -4,11 +4,13 @@ import { motion } from "framer-motion";
 interface MotionComparatorIconProps {
   x: number;
   y: number;
+  symbol: string; // Accept a symbol prop to display
 }
 
 const MotionComparatorIcon: React.FC<MotionComparatorIconProps> = ({
   x,
   y,
+  symbol,
 }) => {
   return (
     <motion.div
@@ -26,7 +28,7 @@ const MotionComparatorIcon: React.FC<MotionComparatorIconProps> = ({
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      {">"}
+      {symbol}
     </motion.div>
   );
 };

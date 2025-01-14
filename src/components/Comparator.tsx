@@ -18,7 +18,7 @@ interface ComparatorProps {
   rightStackRef: React.RefObject<HTMLDivElement>;
   showComparator: boolean;
   compareLines: LineReference[];
-  mode: string;
+  mode: string; // e.g. "none", "drawCompare", or "addRemove"
   rubberLine?: RubberLine | null;
   compareComplete: boolean;
 }
@@ -219,7 +219,11 @@ const Comparator: React.FC<ComparatorProps> = ({
       </svg>
 
       {mode === "drawCompare" && compareComplete && (
-        <MotionComparatorIcon x={positions.midX - 20} y={positions.midY - 40} />
+        <MotionComparatorIcon
+          x={positions.midX - 20}
+          y={positions.midY - 40}
+          symbol={getComparatorSymbol()} // Pass dynamic symbol
+        />
       )}
     </>
   );
