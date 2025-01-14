@@ -34,14 +34,12 @@ const App: React.FC = () => {
   const [rightStack, setRightStack] = useState<number>(0);
   const [leftStackLabel, setLeftStackLabel] = useState<string>("Left Stack");
   const [rightStackLabel, setRightStackLabel] = useState<string>("Right Stack");
-
   const [mode, setMode] = useState<string>("none");
   const [showComparator, setShowComparator] = useState<boolean>(true);
 
   const [selectedStack, setSelectedStack] = useState<StackSelection | null>(
     null
   );
-
   const [compareLines, setCompareLines] = useState<LineDefinition[]>([]);
   const [rubberLine, setRubberLine] = useState<RubberLine | null>(null);
 
@@ -60,7 +58,6 @@ const App: React.FC = () => {
       setCompareLines([]);
       setSelectedStack(null);
       setRubberLine(null);
-
       setLockedPositions({
         leftTop: false,
         leftBottom: false,
@@ -97,7 +94,6 @@ const App: React.FC = () => {
 
         if (!selectedStack) {
           setSelectedStack({ stack, position });
-
           const { x, y } = getStackEdgeCoords(stack, position);
           setRubberLine({ x1: x, y1: y, x2: x, y2: y });
         } else {
@@ -166,7 +162,7 @@ const App: React.FC = () => {
 
   return (
     <div
-      className="relative flex justify-center items-center h-screen bg-gray-900 text-white"
+      className="relative flex justify-center items-center h-screen text-white"
       onClick={handleGlobalClick}
     >
       <div

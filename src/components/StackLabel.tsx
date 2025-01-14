@@ -11,7 +11,7 @@ const StackLabel = ({ text }: StackLabelProps) => {
         zIndex: 10,
         whiteSpace: "nowrap",
       }}
-      className="text-xl font-bold"
+      className="text-xl font-bold text-glow"
     >
       {text}
     </div>

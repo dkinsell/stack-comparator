@@ -79,22 +79,18 @@ const Comparator: React.FC<ComparatorProps> = ({
       {showComparator && mode !== "drawCompare" && (
         <>
           <line
+            className="neon-line"
             x1={positions.x1}
             y1={positions.y1_top}
             x2={positions.x2}
             y2={positions.y2_top}
-            stroke="cyan"
-            strokeWidth="8"
-            strokeLinecap="round"
           />
           <line
+            className="neon-line"
             x1={positions.x1}
             y1={positions.y1_bottom}
             x2={positions.x2}
             y2={positions.y2_bottom}
-            stroke="cyan"
-            strokeWidth="8"
-            strokeLinecap="round"
           />
         </>
       )}
@@ -102,11 +98,12 @@ const Comparator: React.FC<ComparatorProps> = ({
       <text
         x={positions.midX}
         y={(positions.y1_top + positions.y1_bottom) / 2}
-        fill="white"
+        fill="#c2e9fb"
         fontSize="32"
         fontWeight="bold"
         textAnchor="middle"
         alignmentBaseline="middle"
+        className="text-glow"
       >
         {getComparatorSymbol()}
       </text>
@@ -114,20 +111,22 @@ const Comparator: React.FC<ComparatorProps> = ({
       <text
         x={positions.x1}
         y={positions.y1_bottom + 40}
-        fill="white"
         fontSize="20"
         fontWeight="bold"
         textAnchor="middle"
+        fill="#c2e9fb"
+        className="text-glow"
       >
         {leftHeight}
       </text>
       <text
         x={positions.x2}
         y={positions.y2_bottom + 40}
-        fill="white"
         fontSize="20"
         fontWeight="bold"
         textAnchor="middle"
+        fill="#c2e9fb"
+        className="text-glow"
       >
         {rightHeight}
       </text>
@@ -135,26 +134,21 @@ const Comparator: React.FC<ComparatorProps> = ({
       {compareLines.map((line, idx) => (
         <line
           key={idx}
+          className="compare-line"
           x1={line.x1}
           y1={line.y1}
           x2={line.x2}
           y2={line.y2}
-          stroke="yellow"
-          strokeWidth="4"
-          strokeLinecap="round"
         />
       ))}
 
       {rubberLine && (
         <line
+          className="compare-line dashed-line"
           x1={rubberLine.x1}
           y1={rubberLine.y1}
           x2={rubberLine.x2}
           y2={rubberLine.y2}
-          stroke="yellow"
-          strokeDasharray="6, 6"
-          strokeWidth="4"
-          strokeLinecap="round"
         />
       )}
     </svg>

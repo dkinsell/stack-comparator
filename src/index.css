@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Orbitron", sans-serif;
+  background: radial-gradient(circle at 50% 50%, #0a0f1c 0%, #060a12 100%);
+  color: #ffffff;
+}
+
+.neon-line {
+  stroke: #72cdfa;
+  stroke-width: 8;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 8px #72cdfa);
+}
+
+.compare-line {
+  stroke: #fff26b;
+  stroke-width: 4;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px #fff26b);
+}
+
+.dashed-line {
+  stroke-dasharray: 6, 6;
+}
+
+.text-glow {
+  color: #c2e9fb;
+  text-shadow: 0 0 5px rgba(98, 146, 255, 0.8);
+}
+
+.block-cube {
+  background: linear-gradient(135deg, #72cdfa 0%, #6292ff 100%);
+  border-radius: 0.25rem;
+  width: 2rem;
+  height: 2rem;
+  box-shadow: 0 0 8px rgba(98, 146, 255, 0.6),
+    inset 0 0 3px rgba(255, 255, 255, 0.2);
+}

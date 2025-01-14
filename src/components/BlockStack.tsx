@@ -92,7 +92,7 @@ const BlockStack: React.FC<BlockStackProps> = ({
             return (
               <div
                 key={index}
-                className="bg-blue-500 w-full h-8 rounded-md shadow-md"
+                className="block-cube"
                 draggable={mode === "addRemove"}
                 onDragStart={handleDragStart}
                 style={{
@@ -102,16 +102,12 @@ const BlockStack: React.FC<BlockStackProps> = ({
                 }}
                 onClick={(e) => {
                   if (mode === "drawCompare") {
-                    if (isTopBlock) {
-                      if (!lockedTop) {
-                        e.stopPropagation();
-                        handleTopBlockClick();
-                      }
-                    } else if (isBottomBlock) {
-                      if (!lockedBottom) {
-                        e.stopPropagation();
-                        handleBottomBlockClick();
-                      }
+                    if (isTopBlock && !lockedTop) {
+                      e.stopPropagation();
+                      handleTopBlockClick();
+                    } else if (isBottomBlock && !lockedBottom) {
+                      e.stopPropagation();
+                      handleBottomBlockClick();
                     }
                   }
                 }}
