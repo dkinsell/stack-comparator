@@ -18,7 +18,7 @@ interface ComparatorProps {
   rightStackRef: React.RefObject<HTMLDivElement>;
   showComparator: boolean;
   compareLines: LineReference[];
-  mode: string; // e.g. "none", "drawCompare", or "addRemove"
+  mode: string;
   rubberLine?: RubberLine | null;
   compareComplete: boolean;
 }
@@ -137,7 +137,7 @@ const Comparator: React.FC<ComparatorProps> = ({
               x2={positions.x2}
               y2={positions.y2_top}
               stroke="cyan"
-              strokeWidth="8"
+              strokeWidth="16"
               strokeLinecap="round"
             />
             <line
@@ -146,7 +146,7 @@ const Comparator: React.FC<ComparatorProps> = ({
               x2={positions.x2}
               y2={positions.y2_bottom}
               stroke="cyan"
-              strokeWidth="8"
+              strokeWidth="16"
               strokeLinecap="round"
             />
           </>
@@ -156,11 +156,12 @@ const Comparator: React.FC<ComparatorProps> = ({
           <text
             x={positions.midX}
             y={positions.midY}
-            fill="white"
-            fontSize="32"
+            fill="cyan"
+            fontSize="6rem"
             fontWeight="bold"
             textAnchor="middle"
             alignmentBaseline="middle"
+            style={{ textShadow: "0 0 15px cyan" }}
           >
             {getComparatorSymbol()}
           </text>
@@ -198,7 +199,7 @@ const Comparator: React.FC<ComparatorProps> = ({
               x2={rightPt.x}
               y2={rightPt.y}
               stroke="yellow"
-              strokeWidth="4"
+              strokeWidth="16"
               strokeLinecap="round"
             />
           );
@@ -222,7 +223,7 @@ const Comparator: React.FC<ComparatorProps> = ({
         <MotionComparatorIcon
           x={positions.midX - 20}
           y={positions.midY - 40}
-          symbol={getComparatorSymbol()} // Pass dynamic symbol
+          symbol={getComparatorSymbol()}
         />
       )}
     </>

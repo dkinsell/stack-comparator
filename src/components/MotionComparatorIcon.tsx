@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 interface MotionComparatorIconProps {
   x: number;
   y: number;
-  symbol: string; // Accept a symbol prop to display
+  symbol: string;
 }
 
 const MotionComparatorIcon: React.FC<MotionComparatorIconProps> = ({
@@ -21,8 +21,8 @@ const MotionComparatorIcon: React.FC<MotionComparatorIconProps> = ({
         transform: "translate(-50%, -50%)",
         fontSize: "6rem",
         fontWeight: "bold",
-        color: "#72cdfa",
-        textShadow: "0 0 15px #72cdfa",
+        color: "yellow",
+        textShadow: "0 0 15px yellow",
       }}
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}

@@ -3,7 +3,6 @@ import BlockStack from "./components/BlockStack";
 import Comparator from "./components/Comparator";
 import ControlPanel from "./components/ControlPanel";
 
-/** Types */
 interface StackSelection {
   stack: "left" | "right";
   position: "top" | "bottom";
@@ -14,10 +13,6 @@ interface RubberLine {
   x2: number;
   y2: number;
 }
-/**
- * Instead of storing final absolute coords, store an array
- * of lines that says: "the user connected top->top" or bottom->bottom."
- */
 interface LineReference {
   position: "top" | "bottom";
 }
@@ -37,20 +32,14 @@ const App: React.FC = () => {
   const [mode, setMode] = useState<string>("none");
   const [showComparator, setShowComparator] = useState<boolean>(true);
 
-  /** For drawCompare lines: */
   const [selectedStack, setSelectedStack] = useState<StackSelection | null>(
     null
   );
 
-  /**
-   * We no longer store raw coordinates, but "which line"
-   * (top->top or bottom->bottom) the user drew.
-   */
   const [compareLines, setCompareLines] = useState<LineReference[]>([]);
 
   const [rubberLine, setRubberLine] = useState<RubberLine | null>(null);
 
-  /** Lock top/bottom after a line is drawn, so user can't redraw it. */
   const [lockedPositions, setLockedPositions] = useState<LockedPositions>({
     leftTop: false,
     leftBottom: false,
@@ -58,15 +47,11 @@ const App: React.FC = () => {
     rightBottom: false,
   });
 
-  /** We’ll track if user completed top->top and bottom->bottom. */
   const [compareComplete, setCompareComplete] = useState(false);
 
   const leftStackRef = useRef<HTMLDivElement>(null);
   const rightStackRef = useRef<HTMLDivElement>(null);
 
-  /**
-   * If we exit drawCompare mode, reset lines & locks
-   */
   useEffect(() => {
     if (mode !== "drawCompare") {
       setCompareLines([]);
@@ -82,9 +67,6 @@ const App: React.FC = () => {
     }
   }, [mode]);
 
-  /**
-   * MouseMove: update ephemeral rubberLine
-   */
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (rubberLine) {
@@ -98,9 +80,6 @@ const App: React.FC = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [rubberLine]);
 
-  /**
-   * If user clicks anywhere in drawCompare mode while rubberLine is active, discard
-   */
   const handleGlobalClick = () => {
     if (mode === "drawCompare" && rubberLine) {
       setRubberLine(null);
@@ -108,28 +87,21 @@ const App: React.FC = () => {
     }
   };
 
-  /**
-   * Called by each stack. Possibly user clicked top/bottom.
-   */
   const handleStackInteraction = (stack: "left" | "right", action: string) => {
     if (mode === "drawCompare") {
       if (action === "clickedTopBlock" || action === "clickedBottomBlock") {
         const position = action === "clickedTopBlock" ? "top" : "bottom";
         if (!selectedStack) {
-          // first click
           setSelectedStack({ stack, position });
           const { x, y } = getStackEdgeCoords(stack, position);
           setRubberLine({ x1: x, y1: y, x2: x, y2: y });
         } else {
-          // second click on the *other* stack with the *same* position
           if (
             selectedStack.stack !== stack &&
             selectedStack.position === position
           ) {
-            // finalize line in "reference" form:
             setCompareLines((prev) => [...prev, { position }]);
 
-            // lock
             if (position === "top") {
               setLockedPositions((prev) => ({
                 ...prev,
@@ -144,21 +116,16 @@ const App: React.FC = () => {
               }));
             }
           }
-          // either way, clear out for next
           setSelectedStack(null);
           setRubberLine(null);
         }
       } else {
-        // user clicked something else
         setSelectedStack(null);
         setRubberLine(null);
       }
     }
   };
 
-  /**
-   * Return the center coordinate above (top) or below (bottom) a stack.
-   */
   const getStackEdgeCoords = (
     whichStack: "left" | "right",
     position: "top" | "bottom"
@@ -176,7 +143,6 @@ const App: React.FC = () => {
         y: rect.top - lineGap,
       };
     } else {
-      // bottom
       return {
         x: rect.left + offsetX,
         y: rect.bottom + lineGap,
@@ -184,9 +150,6 @@ const App: React.FC = () => {
     }
   };
 
-  /**
-   * If top and bottom lines are both locked for left & right => done
-   */
   useEffect(() => {
     if (
       lockedPositions.leftTop &&
