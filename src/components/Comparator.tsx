@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import MotionComparatorIcon from "./MotionComparatorIcon";
+import { motion } from "framer-motion";
 
 interface LineReference {
   position: "top" | "bottom";
@@ -34,10 +34,6 @@ const Comparator: React.FC<ComparatorProps> = ({
   rubberLine,
   compareComplete,
 }) => {
-  const alphaNormal = 0.5;
-  const alphaDrawCompare = 0.35;
-  const yOffset = -10;
-
   const [positions, setPositions] = useState({
     x1: 0,
     y1_top: 0,
@@ -55,26 +51,21 @@ const Comparator: React.FC<ComparatorProps> = ({
     const leftRect = leftStackRef.current.getBoundingClientRect();
     const rightRect = rightStackRef.current.getBoundingClientRect();
 
+    // Basic measurements
     const offsetX = leftRect.width / 2;
     const lineGap = 20;
 
+    // Calculate line endpoints
     const x1 = leftRect.left + offsetX;
-    const y1_top = leftRect.top - lineGap;
-    const y1_bottom = leftRect.bottom + lineGap;
-
     const x2 = rightRect.left + offsetX;
+    const y1_top = leftRect.top - lineGap;
     const y2_top = rightRect.top - lineGap;
+    const y1_bottom = leftRect.bottom + lineGap;
     const y2_bottom = rightRect.bottom + lineGap;
 
-    const topMidX = (x1 + x2) / 2;
-    const topMidY = (y1_top + y2_top) / 2;
-    const bottomMidX = (x1 + x2) / 2;
-    const bottomMidY = (y1_bottom + y2_bottom) / 2;
-
-    const alpha = mode === "drawCompare" ? alphaDrawCompare : alphaNormal;
-
-    const midX = topMidX + alpha * (bottomMidX - topMidX);
-    const midY = topMidY + alpha * (bottomMidY - topMidY) + yOffset;
+    // Calculate midpoints - center between all four corners
+    const midX = (x1 + x2) / 2;
+    const midY = (y1_top + y2_top + y1_bottom + y2_bottom) / 4;
 
     setPositions({
       x1,
@@ -86,14 +77,7 @@ const Comparator: React.FC<ComparatorProps> = ({
       midX,
       midY,
     });
-  }, [
-    leftStackRef,
-    rightStackRef,
-    alphaDrawCompare,
-    alphaNormal,
-    yOffset,
-    mode,
-  ]);
+  }, [leftStackRef, rightStackRef]);
 
   useEffect(() => {
     calculatePositions();
@@ -167,6 +151,24 @@ const Comparator: React.FC<ComparatorProps> = ({
           </text>
         )}
 
+        {mode === "drawCompare" && compareComplete && (
+          <motion.text
+            x={positions.midX}
+            y={positions.midY}
+            fill="yellow"
+            fontSize="6rem"
+            fontWeight="bold"
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            style={{ textShadow: "0 0 15px yellow" }}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            {getComparatorSymbol()}
+          </motion.text>
+        )}
+
         <text
           x={positions.x1}
           y={positions.y1_bottom + 40}
@@ -218,14 +220,6 @@ const Comparator: React.FC<ComparatorProps> = ({
           />
         )}
       </svg>
-
-      {mode === "drawCompare" && compareComplete && (
-        <MotionComparatorIcon
-          x={positions.midX - 20}
-          y={positions.midY - 40}
-          symbol={getComparatorSymbol()}
-        />
-      )}
     </>
   );
 };
