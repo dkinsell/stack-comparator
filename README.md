@@ -1,50 +1,42 @@
-# React + TypeScript + Vite
+# Stack Comparator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Stack Comparator is a web application that allows users to visually compare two stacks of blocks. Users can add or remove blocks from each stack and draw comparison lines to see how the stacks align.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Add or remove blocks**: Users can dynamically add or remove blocks from each stack to customize their comparison.
+- **Draw comparison lines**: Draw lines between the stacks to visually compare their heights and alignment.
+- **Visualize with animations**: Enjoy dynamic animations that enhance the comparison experience.
 
-## Expanding the ESLint configuration
+## Modes
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **None Mode**: This is the default mode where no interactions are enabled. It allows users to view the stacks without making any changes.
+- **Add/Remove Mode**: Allows users to add or remove blocks from the stacks. This mode is ideal for setting up the initial configuration of the stacks.
+- **Draw/Compare Mode**: Enables users to draw comparison lines between the stacks and automatically compares the stacks, highlighting the differences with animations. This mode provides a quick overview of how the stacks align.
 
-- Configure the top-level `parserOptions` property like this:
+## How to Run Locally
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+1. **Clone the repository:**
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+   ```bash
+   git clone https://github.com/yourusername/stack-comparator.git
+   cd stack-comparator
+   ```
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+2. **Install dependencies:**
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server:**
+
+   ```bash
+   npm run dev
+   ```
+
+   The application will be available at `http://localhost:3000`.
+
+## Accessing the Application Online
+
+You can access the Stack Comparator online at [https://stack-comparator.vercel.app/](https://stack-comparator.vercel.app/).
