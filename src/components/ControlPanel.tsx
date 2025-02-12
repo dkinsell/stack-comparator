@@ -15,7 +15,9 @@ interface ControlPanelProps {
   setShowComparator: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ControlPanel: React.FC<ControlPanelProps> = ({
+// The ControlPanel component provides a user interface to control various aspects of the app,
+// such as modifying the number of blocks in each stack, updating labels, switching modes, and toggling comparator lines.
+const ControlPanel = ({
   leftStack,
   rightStack,
   setLeftStack,
@@ -28,7 +30,8 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   setMode,
   showComparator,
   setShowComparator,
-}) => {
+}: ControlPanelProps) => {
+  // Returns an event handler for numeric inputs that ensures the value is between 0 and 10.
   const handleStackChange =
     (setter: React.Dispatch<SetStateAction<number>>) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +39,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
       setter(value);
     };
 
+  // Returns an event handler for text inputs to update the stack labels.
   const handleLabelChange =
     (setter: React.Dispatch<SetStateAction<string>>) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,8 +65,10 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
         box-border
       "
     >
+      {/* Title for the control panel */}
       <h2 className="text-2xl font-bold mb-4 tracking-wider">Control Panel</h2>
 
+      {/* Section for adjusting the number of blocks in the left and right stacks */}
       <div className="mb-6 flex flex-col gap-4">
         <div>
           <label htmlFor="left-stack-input" className="block mb-1 text-lg">
@@ -113,6 +119,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
         </div>
       </div>
 
+      {/* Section for updating the labels of the left and right stacks */}
       <div className="mb-6 flex flex-col gap-4">
         <div>
           <label htmlFor="left-stack-label" className="block mb-1 text-lg">
@@ -159,6 +166,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
         </div>
       </div>
 
+      {/* Section for selecting the interaction mode and toggling the comparator lines */}
       <div className="mb-6 flex flex-col gap-4">
         <div>
           <label htmlFor="mode-select" className="block mb-1 text-lg">

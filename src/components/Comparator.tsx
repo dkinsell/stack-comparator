@@ -23,7 +23,9 @@ interface ComparatorProps {
   compareComplete: boolean;
 }
 
-const Comparator: React.FC<ComparatorProps> = ({
+// The Comparator component is responsible for drawing the comparison lines and symbols
+// between the two stacks. It uses the positions of the stack elements to determine where to draw.
+const Comparator = ({
   leftHeight,
   rightHeight,
   leftStackRef,
@@ -33,7 +35,8 @@ const Comparator: React.FC<ComparatorProps> = ({
   mode,
   rubberLine,
   compareComplete,
-}) => {
+}: ComparatorProps) => {
+  // State to store calculated positions for line endpoints and the center point.
   const [positions, setPositions] = useState({
     x1: 0,
     y1_top: 0,
@@ -45,17 +48,18 @@ const Comparator: React.FC<ComparatorProps> = ({
     midY: 0,
   });
 
+  // Calculates positions for the lines based on the bounding rectangles of the stacks.
   const calculatePositions = useCallback(() => {
     if (!leftStackRef.current || !rightStackRef.current) return;
 
     const leftRect = leftStackRef.current.getBoundingClientRect();
     const rightRect = rightStackRef.current.getBoundingClientRect();
 
-    // Basic measurements
+    // Determine the horizontal center (offsetX) and a vertical gap for line placement.
     const offsetX = leftRect.width / 2;
     const lineGap = 20;
 
-    // Calculate line endpoints
+    // Calculate x and y coordinates for the top and bottom edges of both stacks.
     const x1 = leftRect.left + offsetX;
     const x2 = rightRect.left + offsetX;
     const y1_top = leftRect.top - lineGap;
@@ -63,7 +67,7 @@ const Comparator: React.FC<ComparatorProps> = ({
     const y1_bottom = leftRect.bottom + lineGap;
     const y2_bottom = rightRect.bottom + lineGap;
 
-    // Calculate midpoints - center between all four corners
+    // Calculate the midpoint between the two stacks for centering the comparator symbol.
     const midX = (x1 + x2) / 2;
     const midY = (y1_top + y2_top + y1_bottom + y2_bottom) / 4;
 
@@ -79,6 +83,7 @@ const Comparator: React.FC<ComparatorProps> = ({
     });
   }, [leftStackRef, rightStackRef]);
 
+  // Recalculate positions on mount, on window resize, or when stack heights change.
   useEffect(() => {
     calculatePositions();
     const handleResize = () => calculatePositions();
@@ -86,6 +91,7 @@ const Comparator: React.FC<ComparatorProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, [calculatePositions, leftHeight, rightHeight]);
 
+  // Helper function to retrieve the edge coordinates for a given stack and position (top or bottom).
   const getStackEdgeCoords = (
     which: "left" | "right",
     pos: "top" | "bottom"
@@ -101,6 +107,7 @@ const Comparator: React.FC<ComparatorProps> = ({
     }
   };
 
+  // Determines the comparator symbol (>, <, or =) based on the relative heights of the two stacks.
   const getComparatorSymbol = () => {
     if (leftHeight > rightHeight) return ">";
     if (leftHeight < rightHeight) return "<";
@@ -109,10 +116,12 @@ const Comparator: React.FC<ComparatorProps> = ({
 
   return (
     <>
+      {/* SVG container for drawing comparator lines, symbols, and text */}
       <svg
         className="absolute w-full h-full pointer-events-none"
         style={{ top: 0, left: 0 }}
       >
+        {/* Render comparator lines if they should be shown and not in "drawCompare" mode */}
         {showComparator && mode !== "drawCompare" && (
           <>
             <line
@@ -136,6 +145,7 @@ const Comparator: React.FC<ComparatorProps> = ({
           </>
         )}
 
+        {/* Display the comparator symbol in non-drawCompare mode */}
         {mode !== "drawCompare" && (
           <text
             x={positions.midX}
@@ -151,6 +161,7 @@ const Comparator: React.FC<ComparatorProps> = ({
           </text>
         )}
 
+        {/* Animate and display the comparator symbol in "drawCompare" mode once the comparison is complete */}
         {mode === "drawCompare" && compareComplete && (
           <motion.text
             x={positions.midX}
@@ -169,6 +180,7 @@ const Comparator: React.FC<ComparatorProps> = ({
           </motion.text>
         )}
 
+        {/* Display the left and right stack heights beneath their respective stacks */}
         <text
           x={positions.x1}
           y={positions.y1_bottom + 40}
@@ -190,6 +202,7 @@ const Comparator: React.FC<ComparatorProps> = ({
           {rightHeight}
         </text>
 
+        {/* Draw additional comparison lines based on user interactions */}
         {compareLines.map((lineRef, idx) => {
           const leftPt = getStackEdgeCoords("left", lineRef.position);
           const rightPt = getStackEdgeCoords("right", lineRef.position);
@@ -207,6 +220,7 @@ const Comparator: React.FC<ComparatorProps> = ({
           );
         })}
 
+        {/* Render a dynamic "rubber" line during the drawCompare interaction */}
         {mode === "drawCompare" && rubberLine && (
           <line
             x1={rubberLine.x1}

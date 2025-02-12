@@ -2,6 +2,8 @@ interface StackLabelProps {
   text: string;
 }
 
+// The StackLabel component displays a label above a stack.
+// It is positioned absolutely so that it appears above the stack element.
 const StackLabel = ({ text }: StackLabelProps) => {
   return (
     <div

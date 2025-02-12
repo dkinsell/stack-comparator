@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import BlockStack from "./components/BlockStack";
 import Comparator from "./components/Comparator";
 import ControlPanel from "./components/ControlPanel";
@@ -24,22 +24,30 @@ interface LockedPositions {
   rightBottom: boolean;
 }
 
-const App: React.FC = () => {
+// The main App component that ties together the BlockStack, Comparator, and ControlPanel components.
+const App = () => {
+  // State variables for stack block counts and labels.
   const [leftStack, setLeftStack] = useState<number>(0);
   const [rightStack, setRightStack] = useState<number>(0);
   const [leftStackLabel, setLeftStackLabel] = useState<string>("Left Stack");
   const [rightStackLabel, setRightStackLabel] = useState<string>("Right Stack");
+
+  // State variables for interaction mode and whether comparator lines are shown.
   const [mode, setMode] = useState<string>("none");
   const [showComparator, setShowComparator] = useState<boolean>(true);
 
+  // State to keep track of a selected stack during "drawCompare" interactions.
   const [selectedStack, setSelectedStack] = useState<StackSelection | null>(
     null
   );
 
+  // State to store the lines drawn between stacks during comparison.
   const [compareLines, setCompareLines] = useState<LineReference[]>([]);
 
+  // State for a dynamic "rubber" line during the drawing interaction.
   const [rubberLine, setRubberLine] = useState<RubberLine | null>(null);
 
+  // State to lock certain positions (top or bottom) on either stack once a comparison is made.
   const [lockedPositions, setLockedPositions] = useState<LockedPositions>({
     leftTop: false,
     leftBottom: false,
@@ -47,11 +55,14 @@ const App: React.FC = () => {
     rightBottom: false,
   });
 
+  // State to indicate when the comparison is complete.
   const [compareComplete, setCompareComplete] = useState(false);
 
+  // References to the DOM elements of the left and right stacks.
   const leftStackRef = useRef<HTMLDivElement>(null);
   const rightStackRef = useRef<HTMLDivElement>(null);
 
+  // Reset comparison-related states when the interaction mode changes from "drawCompare".
   useEffect(() => {
     if (mode !== "drawCompare") {
       setCompareLines([]);
@@ -67,6 +78,7 @@ const App: React.FC = () => {
     }
   }, [mode]);
 
+  // Update the rubber line's endpoint as the mouse moves.
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (rubberLine) {
@@ -80,6 +92,7 @@ const App: React.FC = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [rubberLine]);
 
+  // Handles a global click which resets the rubber line and selected stack in "drawCompare" mode.
   const handleGlobalClick = () => {
     if (mode === "drawCompare" && rubberLine) {
       setRubberLine(null);
@@ -87,21 +100,26 @@ const App: React.FC = () => {
     }
   };
 
+  // Handles interactions on a stack (clicking top or bottom) during the "drawCompare" mode.
+  // It sets the start of a line, and if a valid second selection is made, it adds a comparison line.
   const handleStackInteraction = (stack: "left" | "right", action: string) => {
     if (mode === "drawCompare") {
       if (action === "clickedTopBlock" || action === "clickedBottomBlock") {
         const position = action === "clickedTopBlock" ? "top" : "bottom";
         if (!selectedStack) {
+          // No stack selected yet: set the current selection and start the rubber line.
           setSelectedStack({ stack, position });
           const { x, y } = getStackEdgeCoords(stack, position);
           setRubberLine({ x1: x, y1: y, x2: x, y2: y });
         } else {
+          // A stack is already selected: if the second selection is on the opposite stack and same position, create a compare line.
           if (
             selectedStack.stack !== stack &&
             selectedStack.position === position
           ) {
             setCompareLines((prev) => [...prev, { position }]);
 
+            // Lock the corresponding positions on both stacks.
             if (position === "top") {
               setLockedPositions((prev) => ({
                 ...prev,
@@ -116,16 +134,19 @@ const App: React.FC = () => {
               }));
             }
           }
+          // Reset selection and rubber line regardless of whether a valid compare line was made.
           setSelectedStack(null);
           setRubberLine(null);
         }
       } else {
+        // If the action is not a valid click on a block, reset the selection and rubber line.
         setSelectedStack(null);
         setRubberLine(null);
       }
     }
   };
 
+  // Helper function to compute the edge coordinates (top or bottom) for a given stack.
   const getStackEdgeCoords = (
     whichStack: "left" | "right",
     position: "top" | "bottom"
@@ -150,6 +171,7 @@ const App: React.FC = () => {
     }
   };
 
+  // When all four positions (top and bottom for both stacks) are locked, mark the comparison as complete.
   useEffect(() => {
     if (
       lockedPositions.leftTop &&
@@ -174,6 +196,7 @@ const App: React.FC = () => {
           width: "80%",
         }}
       >
+        {/* Left stack component */}
         <BlockStack
           label={leftStackLabel}
           blocks={leftStack}
@@ -187,6 +210,7 @@ const App: React.FC = () => {
           lockedBottom={lockedPositions.leftBottom}
         />
 
+        {/* Comparator component to visualize comparisons between the stacks */}
         <Comparator
           leftHeight={leftStack}
           rightHeight={rightStack}
@@ -199,6 +223,7 @@ const App: React.FC = () => {
           compareComplete={compareComplete}
         />
 
+        {/* Right stack component */}
         <BlockStack
           label={rightStackLabel}
           blocks={rightStack}
@@ -213,6 +238,7 @@ const App: React.FC = () => {
         />
       </div>
 
+      {/* Control panel for adjusting stacks, labels, and interaction modes */}
       <ControlPanel
         leftStack={leftStack}
         rightStack={rightStack}
